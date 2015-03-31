@@ -1,0 +1,31 @@
+---
+- hosts: digitalocean
+  user: freebsd
+  sudo: yes
+  tasks:
+  - name: enable firewall
+    command: /usr/sbin/sysrc firewall_enable=YES
+  - name: configuring firewall
+    command: /usr/sbin/sysrc firewall_quiet=YES
+  - name: configuring firewall
+    command: /usr/sbin/sysrc firewall_type=workstation
+  - name: configuring firewall
+    command: /usr/sbin/sysrc firewall_myservices="22"
+  - name: configuring firewall
+    command: /usr/sbin/sysrc firewall_allowservices=any
+  - name: configuring firewall
+    command: /usr/sbin/sysrc firewall_logdeny=YES
+  - name: start firewall
+    service: name=ipfw state=started
+  - name: persist limit logging
+    shell: echo "net.inet.ip.fw.verbose_limit=5" >> /etc/sysctl.conf
+  - name: enable limit logging
+    command: /sbin/sysctl net.inet.ip.fw.verbose_limit=5
+  - name: set timezone
+    command: /usr/sbin/tzsetup -s Europe/Amsterdam
+  - name: enable ntp
+    command: /usr/sbin/sysrc ntpd_enable=YES
+  - name: ntp sync on start
+    command: /usr/sbin/sysrc ntpd_sync_on_start=YES
+  - name: start ntpd
+    service: name=ntpd state=started

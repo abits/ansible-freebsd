@@ -1,0 +1,7 @@
+---
+- hosts: digitalocean
+  user: freebsd
+  sudo: yes
+  tasks:
+    - name: generate standard user
+      user: name=chris password=zSn63Djl4kw0. shell=/usr/local/bin/zsh groups=wheel append=yes generate_ssh_key=yes ssh_key_bits=2048 ssh_key_file=.ssh/id_rsa

@@ -1,0 +1,7 @@
+---
+- hosts: digitalocean
+  user: freebsd
+  sudo: yes
+  tasks:
+    - name: install mail server
+      pkgng: name=opensmtpd state=present
