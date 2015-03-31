@@ -5,3 +5,7 @@
   tasks:
   - name: install zsh
     pkgng: name=zsh state=present
+  - name: change shell for user
+    user: name=freebsd shell=/usr/local/bin/zsh
+  - name: install zshrc file
+    copy: src=zshrc dest=/home/freebsd/.zshrc owner=freebsd group=freebsd mode=644
