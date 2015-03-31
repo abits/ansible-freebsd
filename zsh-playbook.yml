@@ -8,4 +8,4 @@
   - name: change shell for user
     user: name=freebsd shell=/usr/local/bin/zsh
   - name: install zshrc file
-    copy: src=zshrc dest=/home/freebsd/.zshrc owner=freebsd group=freebsd mode=644
+    copy: src=zshrc dest=/home/chris/.zshrc owner=chris group=chris mode=644
