@@ -2,6 +2,8 @@
 - hosts: digitalocean
   user: freebsd
   sudo: yes
+  vars:
+    mail_fqdn: mail.codeways.org
   tasks:
   - name: enable firewall
     command: /usr/sbin/sysrc firewall_enable=YES
@@ -29,3 +31,7 @@
     command: /usr/sbin/sysrc ntpd_sync_on_start=YES
   - name: start ntpd
     service: name=ntpd state=started
+  - name: Creates directory
+    file: path=/etc/ssl/mail state=directory
+  - name: generate ssl certificate for mail server
+    command: openssl req -new -nodes -x509 -subj "/C=NL/ST=NL/L=Amsterdam/O=codeways/CN=${mail_fqdn}" -days 3650 -keyout /etc/ssl/mail/mail.codeways.org.key -out /etc/ssl/mail/mail.codeways.org.crt -extensions v3_ca creates=/etc/ssl/mail/mail.codeways.org.crt

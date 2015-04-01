@@ -2,6 +2,12 @@
 - hosts: digitalocean
   user: freebsd
   sudo: yes
+  vars:
+    hostname: codeways.org
   tasks:
     - name: install mail server
       pkgng: name=opensmtpd state=present
+    - name: update configuration
+      template: src=smtpd.conf.j2 dest=/usr/local/etc/mail/smtpd.conf
+#    - name: Start OpenSMTPD
+#      service: name=smtpd state=started

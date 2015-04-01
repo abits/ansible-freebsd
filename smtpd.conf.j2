@@ -1,0 +1,12 @@
+pki mailer certificate "/etc/mail/certs/host.crt"
+pki mailer key "/etc/mail/certs/host.key"
+
+listen on lo0
+listen on vtnet0 port 25 hostname {{ hostname }} tls pki mailer
+listen on vtnet0 port 587 hostname {{ hostname }} tls-require pki mailer auth mask-source
+
+table aliases db:/etc/mail/aliases.db
+
+accept from any for local alias <aliases> deliver to maildir
+accept from any for domain codeways.org deliver to maildir
+accept from local for any relay
