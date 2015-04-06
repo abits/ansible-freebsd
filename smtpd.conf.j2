@@ -1,5 +1,5 @@
-pki mailer certificate "/etc/mail/certs/host.crt"
-pki mailer key "/etc/mail/certs/host.key"
+pki mailer certificate "/etc/ssl/mail/mail.{{ hostname }}.crt"
+pki mailer key "/etc/ssl/mail/mail.{{ hostname }}.key"
 
 listen on lo0
 listen on vtnet0 port 25 hostname {{ hostname }} tls pki mailer
