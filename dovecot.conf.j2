@@ -1,0 +1,21 @@
+log_path = /var/log/dovecot.log
+listen = *, ::
+protocols = imap
+disable_plaintext_auth = no
+mail_location = maildir:~/Maildir
+auth_mechanisms = plain login
+default_client_limit = 100
+default_process_limit = 10
+passdb {
+    driver = bsdauth
+}
+
+userdb {
+    driver = passwd
+}
+
+ssl = yes
+# Preferred permissions: root:root 0444
+ssl_cert = </etc/ssl/dovecotcert.pem
+# Preferred permissions: root:root 0400
+ssl_key = </etc/ssl/private/dovecot.pem
