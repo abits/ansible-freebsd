@@ -1,9 +1,9 @@
-pki mailer certificate "/etc/ssl/mail/mail.{{ hostname }}.crt"
-pki mailer key "/etc/ssl/mail/mail.{{ hostname }}.key"
+pki mailer certificate "/etc/ssl/mail/{{ mail_fqdn }}.crt"
+pki mailer key "/etc/ssl/mail/{{ mail_fqdn }}.key"
 
-listen on lo0
-listen on vtnet0 port 25 hostname {{ hostname }} tls pki mailer
-listen on vtnet0 port 587 hostname {{ hostname }} tls-require pki mailer auth mask-source
+# listen on lo0
+# listen on {{ device }} port 25 hostname {{ mail_fqdn }} tls pki mailer
+listen on {{ device }} port 587 hostname {{ mail_fqdn }} tls-require pki mailer auth mask-source
 
 table aliases db:/etc/mail/aliases.db
 

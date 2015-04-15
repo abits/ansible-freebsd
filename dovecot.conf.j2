@@ -1,7 +1,7 @@
 log_path = /var/log/dovecot.log
 listen = *, ::
 protocols = imap
-disable_plaintext_auth = no
+disable_plaintext_auth = yes
 mail_location = maildir:~/Maildir
 auth_mechanisms = plain login
 default_client_limit = 100
@@ -14,8 +14,18 @@ userdb {
     driver = passwd
 }
 
-ssl = yes
+ssl = required
 # Preferred permissions: root:root 0444
-ssl_cert = </etc/ssl/dovecotcert.pem
+ssl_cert = </etc/ssl/certs/dovecot.pem
 # Preferred permissions: root:root 0400
 ssl_key = </etc/ssl/private/dovecot.pem
+
+service imap-login {
+  inet_listener imap {
+    port = 0
+  }
+  inet_listener imaps {
+    #port = 993
+    #ssl = yes
+  }
+}
