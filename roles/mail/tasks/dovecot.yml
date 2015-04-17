@@ -1,0 +1,31 @@
+---
+- name: install imap server
+  pkgng: name=dovecot2 state=present
+- name: Creates ssl certs directory
+  file: path=/etc/ssl/certs state=directory
+- name: Creates ssl private directory
+  file: path=/etc/ssl/private state=directory
+- name: update dovecot ssl configuration
+  template: src=dovecot.openssl.cnf.j2 dest=/usr/local/share/examples/dovecot/dovecot-openssl.cnf
+- name: generate ssl certificate for imap server
+  command: /bin/sh /usr/local/share/examples/dovecot/mkcert.sh
+  args:
+    chdir: /usr/local/share/examples/dovecot
+    creates: /etc/ssl/certs/dovecot.pem
+- name: fix permissions for dovecot cert
+  file: path=/etc/ssl/certs/dovecot.pem owner=root group=wheel mode=0444
+- name: fix permissions for dovecot key
+  file: path=/etc/ssl/private/dovecot.pem owner=root group=wheel mode=0400
+- name: install dovecot config templates
+  shell: cp -r example-config/* .
+  args:
+    chdir: /usr/local/etc/dovecot
+    creates: /usr/local/etc/dovecot/dovecot.conf
+- name: install docvecot configuration
+  template: src=dovecot.conf.j2 dest=/usr/local/etc/dovecot/local.conf
+- name: install dovecot pam.d config
+  template: src=dovecot.pam.j2 dest=/usr/local/etc/pam.d/dovecot
+- name: enable imap server
+  command: /usr/sbin/sysrc dovecot_enable=YES
+  notify:
+    - Restart dovecot

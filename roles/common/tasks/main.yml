@@ -1,0 +1,59 @@
+---
+- name: set hostname
+  command: hostname {{fqdn}}
+- name: enable firewall
+  command: /usr/sbin/sysrc firewall_enable=YES
+  tags: firewall
+- name: configuring firewall
+  command: /usr/sbin/sysrc firewall_quiet=YES
+  tags: firewall
+  notify:
+    - restart firewall
+- name: configuring firewall
+  command: /usr/sbin/sysrc firewall_type=workstation
+  tags: firewall
+  notify:
+    - restart firewall
+- name: configuring firewall
+  command: /usr/sbin/sysrc firewall_myservices="{{ports_open}}"
+  tags: firewall
+  notify:
+    - restart firewall
+- name: configuring firewall
+  command: /usr/sbin/sysrc firewall_allowservices=any
+  tags: firewall
+  notify:
+    - restart firewall
+- name: configuring firewall
+  command: /usr/sbin/sysrc firewall_logdeny=YES
+  tags: firewall
+  notify:
+    - restart firewall
+- name: persist limit logging
+  shell: echo "net.inet.ip.fw.verbose_limit=5" >> /etc/sysctl.conf
+  tags: firewall
+- name: enable limit logging
+  command: /sbin/sysctl net.inet.ip.fw.verbose_limit=5
+  tags: firewall
+  notify:
+    - restart firewall
+- name: set timezone
+  command: /usr/sbin/tzsetup -s {{timezone}}
+  tags: ntp
+  notify:
+    - restart ntpd
+- name: enable ntp
+  command: /usr/sbin/sysrc ntpd_enable=YES
+  tags: ntp
+- name: ntp sync on start
+  command: /usr/sbin/sysrc ntpd_sync_on_start=YES
+  tags: ntp
+- name: install sshguard
+  pkgng: name=sshguard-ipfw state=present
+  tags: firewall
+- name: enable sshguard
+  command: /usr/sbin/sysrc sshguard_enable=YES
+  notify:
+    - restart sshguard
+  tags: firewall
+

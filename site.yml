@@ -1,0 +1,7 @@
+- hosts: digitalocean
+  user: freebsd
+  sudo: yes
+  roles:
+    - common
+    - user
+    - mail

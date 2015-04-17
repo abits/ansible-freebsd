@@ -1,0 +1,23 @@
+---
+- name: install mail server
+  pkgng: name=opensmtpd state=present
+- name: generate ssl certificate for mail server
+  command: openssl req -new -nodes -x509 -subj "/C={{req_dn}}/ST={{state}}/L={{locality}}/O={{organization}}/CN={{mail_fqdn}}" -days 3650 -keyout /etc/ssl/private/{{mail_fqdn}}.key -out /etc/ssl/certs/{{mail_fqdn}}.crt -extensions v3_ca creates=/etc/ssl/certs/{{mail_fqdn}}.crt
+- name: permissions for certificates
+  file: path=/etc/ssl/certs/{{mail_fqdn}}.crt owner=root group=wheel mode=0444
+- name: permissions for key
+  file: path=/etc/ssl/private/{{mail_fqdn}}.key owner=root group=wheel mode=0400
+- name: update configuration
+  template: src=smtpd.conf.j2 dest=/usr/local/etc/mail/smtpd.conf
+- name: disable sendmail service
+  command: /usr/sbin/sysrc sendmail_enable=NO
+- name: disable sendmail submit
+  command: /usr/sbin/sysrc sendmail_submit_enable=NO
+- name: disable sendmail outbound
+  command: /usr/sbin/sysrc sendmail_outbound_enable=NO
+- name: disable sendmail queue
+  command: /usr/sbin/sysrc sendmail_msp_queue_enable=NO
+- name: enable opensmtpd server
+  command: /usr/sbin/sysrc smtpd_enable=YES
+  notify:
+    - Restart OpenSMTPD

@@ -1,0 +1,9 @@
+device: vtnet0
+mail_fqdn: mail.codeways.org
+req_dn: NL
+state: NL
+locality: Amsterdam
+organization: codeways
+organizational_unit: codeways
+common_name: mail.codeways.org
+email_contact: postmaster@codeways.org

@@ -1,0 +1,4 @@
+---
+- name: install zsh
+  pkgng: name=zsh state=present
+

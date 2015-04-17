@@ -1,2 +1,1 @@
-# ansible-freebsd
-ansible-freebsd
+Ansible playbooks for digitalocean's freebsd droplet.
