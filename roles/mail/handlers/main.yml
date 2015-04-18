@@ -3,3 +3,5 @@
   service: name=smtpd state=restarted
 - name: Restart dovecot
   service: name=dovecot state=restarted
+- name: Refresh aliases
+  shell: /usr/bin/newaliases

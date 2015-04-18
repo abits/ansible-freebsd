@@ -9,6 +9,10 @@
   file: path=/etc/ssl/private/{{mail_fqdn}}.key owner=root group=wheel mode=0400
 - name: update configuration
   template: src=smtpd.conf.j2 dest=/usr/local/etc/mail/smtpd.conf
+- name: update aliases
+  template: src=aliases.j2 dest=/etc/mail/aliases
+  notify:
+    - Refresh aliases
 - name: disable sendmail service
   command: /usr/sbin/sysrc sendmail_enable=NO
 - name: disable sendmail submit
