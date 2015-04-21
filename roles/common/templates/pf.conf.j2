@@ -1,0 +1,6 @@
+tcp_services = "{ {{ports_open}} }"
+udp_services = "{ domain }"
+block log all
+pass out proto tcp to port $tcp_services
+pass proto udp to port $udp_services
+pass in proto tcp to port $tcp_services

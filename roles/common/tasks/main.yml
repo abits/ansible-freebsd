@@ -2,38 +2,15 @@
 - name: set hostname
   command: hostname {{fqdn}}
 - name: enable firewall
-  command: /usr/sbin/sysrc firewall_enable=YES
+  command: /usr/sbin/sysrc pf_enable=YES
   tags: firewall
 - name: configuring firewall
-  command: /usr/sbin/sysrc firewall_quiet=YES
+  command: /usr/sbin/sysrc pflog_enable=YES
   tags: firewall
   notify:
     - restart firewall
 - name: configuring firewall
-  command: /usr/sbin/sysrc firewall_type=workstation
-  tags: firewall
-  notify:
-    - restart firewall
-- name: configuring firewall
-  command: /usr/sbin/sysrc firewall_myservices="{{ports_open}}"
-  tags: firewall
-  notify:
-    - restart firewall
-- name: configuring firewall
-  command: /usr/sbin/sysrc firewall_allowservices=any
-  tags: firewall
-  notify:
-    - restart firewall
-- name: configuring firewall
-  command: /usr/sbin/sysrc firewall_logdeny=YES
-  tags: firewall
-  notify:
-    - restart firewall
-- name: persist limit logging
-  shell: echo "net.inet.ip.fw.verbose_limit=5" >> /etc/sysctl.conf
-  tags: firewall
-- name: enable limit logging
-  command: /sbin/sysctl net.inet.ip.fw.verbose_limit=5
+  template: src=pf.conf.j2 dest=/etc/pf.conf owner=root group=wheel mode=0644
   tags: firewall
   notify:
     - restart firewall
@@ -49,11 +26,25 @@
   command: /usr/sbin/sysrc ntpd_sync_on_start=YES
   tags: ntp
 - name: install sshguard
-  pkgng: name=sshguard-ipfw state=present
+  pkgng: name=sshguard-pf state=present
   tags: firewall
 - name: enable sshguard
   command: /usr/sbin/sysrc sshguard_enable=YES
   notify:
     - restart sshguard
   tags: firewall
-
+- name: configure sshguard
+  command: /usr/sbin/sysrc sshguard_safety_thresh="30"
+  notify:
+    - restart sshguard
+  tags: firewall
+- name: configure sshguard
+  command: /usr/sbin/sysrc sshguard_pardon_min_interval="600"
+  notify:
+    - restart sshguard
+  tags: firewall
+- name: configure sshguard
+  command: /usr/sbin/sysrc sshguard_prescribe_interval="7200"
+  notify:
+    - restart sshguard
+  tags: firewall

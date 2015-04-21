@@ -1,4 +1,4 @@
 ---
-fqdn: ritchie.codeway.org
-ports_open: "22,25,587,993"
+fqdn: ritchie.codeways.org
+ports_open: "22 25 80 587 993"
 timezone: Europe/Amsterdam
