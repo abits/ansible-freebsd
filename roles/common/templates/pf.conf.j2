@@ -1,5 +1,9 @@
 tcp_services = "{ {{ports_open}} }"
 udp_services = "{ domain }"
+
+table <sshguard> persist
+
+block in quick proto tcp from <sshguard> to any port 22 label "ssh bruteforce"
 block log all
 pass out proto tcp to port $tcp_services
 pass proto udp to port $udp_services
