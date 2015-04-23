@@ -3,3 +3,7 @@
   user: name={{username}} password={{password}} shell=/usr/local/bin/zsh groups=wheel append=yes generate_ssh_key=yes ssh_key_bits=2048 ssh_key_file=.ssh/id_rsa
 - name: configure zsh for standard user
   copy: src=zshrc dest=/home/{{username}}/.zshrc owner={{username}} group={{username}} mode=644
+- name: create ssh key
+  command: /usr/bin/ssh-keygen -q chdir=/home/{{username}} creates=/home/{{username}}/.ssh/id_rsa
+- name: copy ssh keys from default user
+  command: /bin/cp /home/freebsd/.ssh/authorized_keys /home/{{username}}/.ssh/authorized_keys creates=/home/{{username}}/.ssh/authorized_keys
