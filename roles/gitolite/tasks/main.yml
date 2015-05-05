@@ -1,0 +1,23 @@
+---
+- name: install git
+  pkgng: name=git state=present
+- name: install gitolite
+  pkgng: name=gitolite state=present
+- name: create git group
+  group: name={{hosting_user}} system=yes state=present
+- name: create git user
+  user: name={{hosting_user}} group={{hosting_user}} home=/home/{{hosting_user}} system=yes state=present createhome=yes
+- name: create ssh directory
+  file: path=/home/{{hosting_user}}/.ssh state=directory owner={{hosting_user}} group={{hosting_user}} mode=750
+- name: copy hosting user ssh key from default user
+  shell: cp /home/{{local_admin}}/.ssh/id_rsa.pub /home/{{hosting_user}}/.ssh/{{local_admin}}.pub
+  args:
+    creates: /home/{{hosting_user}}/.ssh/{{local_admin}}.pub
+- name: fix permissions of key file
+  file: path=/home/{{hosting_user}}/.ssh/{{local_admin}}.pub owner={{hosting_user}} group={{hosting_user}} mode=640
+- name: setup gitolite
+  become_user: "{{hosting_user}}"
+  become: yes
+  shell: gitolite setup -pk /home/{{hosting_user}}/.ssh/{{local_admin}}.pub
+  args:
+    chdir: /usr/home/{{hosting_user}}
