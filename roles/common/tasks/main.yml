@@ -1,6 +1,8 @@
 ---
 - name: set hostname
   command: hostname {{fqdn}}
+- name: persist hostname
+  template: src=hostname.j2 dest=/etc/hostname owner=root group=wheel mode=0644
 - name: enable firewall
   command: /usr/sbin/sysrc pf_enable=YES
   tags: firewall
