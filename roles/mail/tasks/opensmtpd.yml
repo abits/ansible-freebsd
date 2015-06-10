@@ -1,6 +1,10 @@
 ---
 - name: install mail server
   pkgng: name=opensmtpd state=present
+- name: Creates ssl certs directory
+  file: path=/etc/ssl/certs state=directory
+- name: Creates ssl private directory
+  file: path=/etc/ssl/private state=directory
 - name: generate ssl certificate for mail server
   command: openssl req -new -nodes -x509 -subj "/C={{req_dn}}/ST={{state}}/L={{locality}}/O={{organization}}/CN={{mail_fqdn}}" -days 3650 -keyout /etc/ssl/private/{{mail_fqdn}}.key -out /etc/ssl/certs/{{mail_fqdn}}.crt -extensions v3_ca creates=/etc/ssl/certs/{{mail_fqdn}}.crt
 - name: permissions for certificates

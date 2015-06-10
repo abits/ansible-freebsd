@@ -1,0 +1,19 @@
+- hosts: localhost
+  roles:
+    - digitalocean
+
+- hosts: newdroplets
+  user: freebsd
+  sudo: yes
+  gather_facts: no
+  roles:
+    - python
+
+- hosts: newdroplets
+  user: freebsd
+  sudo: yes
+  roles:
+      - common
+      - user
+      - mail
+      - gitolite

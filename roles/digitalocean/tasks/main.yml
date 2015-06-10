@@ -1,0 +1,22 @@
+---
+- name: Create new droplet
+  digital_ocean: state=present
+                 command=droplet
+                 name="{{ droplet_name }}"
+                 size_id="{{ droplet_size_id }}"
+                 region_id="{{ droplet_region_id }}"
+                 image_id="{{ droplet_image_id }}"
+                 ssh_key_ids="{{ ssh_pub_key }}"
+                 wait_timeout=600
+                 api_key="{{ do_api_key }}"
+                 client_id="{{ do_client_id }}"
+                 wait=yes
+  register: do_droplet
+
+- name: Add droplet ip to inventory
+  add_host: hostname="{{ do_droplet.droplet.ip_address }}"
+            groups=newdroplets
+            ansible_python_interpreter=/usr/local/bin/python
+
+- name: wait a little
+  pause: minutes=1 prompt="wait a little"

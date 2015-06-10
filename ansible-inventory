@@ -1,3 +1,5 @@
-[digitalocean]
-178.62.225.186 ansible_python_interpreter=/usr/local/bin/python
+[localhost]
+localhost         ansible_connection=local ansible_python_interpreter=/usr/local/bin/python
 
+[digitalocean]
+178.62.225.186    ansible_python_interpreter=/usr/local/bin/python

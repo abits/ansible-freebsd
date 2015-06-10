@@ -1,0 +1,8 @@
+---
+droplet_name: hopcroft.codeways.org
+droplet_size_id: 66
+droplet_region_id: 9
+droplet_image_id: 10144573
+do_client_id: <YOUR CLIENT ID>
+do_api_key: <YOUR API KEY>
+ssh_pub_key: 642368
